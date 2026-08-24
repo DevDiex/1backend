@@ -5,6 +5,12 @@ class Program
     static void Main(string[] args)
     {
 
+
+        // ПОД СКАЗКА ПО WHILE:
+        // 1. Использовать, когда НЕ знаешь заранее, сколько раз выполнится код (пока не введут 'exit', пока не скачается файл).
+        // 2. Если внутри while(true) нет break или continue — программа зависнет навсегда.
+        // 3. НЕ использовать вместо if для простых одиночных проверок.
+
         while (true) // бесконечный цикл крутящий код внутри {} чтобы из него выйти нужен оператор break и чтобы прыгнуть в него игнорируя код снизу нужен continue;
         {
             Console.Write("Введите первое число: "); // Write не переносит строку как Enter как WriteLine
@@ -40,30 +46,37 @@ class Program
             }
             int result = 0;
 
-            if (op == "+")
+            switch (op)
             {
-                result = num1 + num2;
-            }
-            else if (op == "-")
-            {
-                result = num1 - num2;
-            }
-            else if (op == "*")
-            {
-                result = num1 * num2;
-            }
+                case "+":
+                    result = num1 + num2;
+                    break;
 
-            else if (op == "/")
-            {
-                result = num1 / num2;
+                case "-":
+                    result = num1 - num2;
+                    break;
+
+                case "*":
+                    result = num1 * num2;
+                    break;
+
+                case "/":
+                    if (num2 == 0)
+                    {
+                        Console.WriteLine("Ошибка - нельзя делить на 0");
+                        Console.ReadKey();
+                        continue;
+                    }
+                    result = num1 / num2;
+                    break;
             }
-            // Условия (conditions - if/else if) проверяемые компом сверху вниз (from top to bottom)
-            // если сработает один if остальные компьютер скипнет.
-            // == проверка сравнение (точно ли) а не присвоение как =
             Console.WriteLine($"Результат операций: {result}");
             Console.WriteLine($"Нажми любую кнопку для следующего круга...");
             Console.ReadKey();
         }
+        // Условия (conditions - if/else if) проверяемые компом сверху вниз (from top to bottom)
+        // если сработает один if остальные компьютер скипнет.
+        // == проверка сравнение (точно ли) а не присвоение как =
     }
-    // Main главная точка входа в программу с которой все начинается (в бэкэнде так не пишут)
 }
+// Main главная точка входа в программу с которой все начинается (в бэкэнде так не пишут)
