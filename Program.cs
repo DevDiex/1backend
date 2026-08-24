@@ -69,6 +69,12 @@ class Program
                     }
                     result = num1 / num2;
                     break;
+
+                default:
+
+                    Console.WriteLine("Ошибка: Неверный математический знак");
+                    Console.ReadKey();
+                    continue;
             }
             Console.WriteLine($"Результат операций: {result}");
             Console.WriteLine($"Нажми любую кнопку для следующего круга...");
