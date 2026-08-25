@@ -46,36 +46,9 @@ class Program
             }
             int result = 0;
 
-            switch (op)
-            {
-                case "+":
-                    result = num1 + num2;
-                    break;
+            result = CalculNum(num1, num2, op);
 
-                case "-":
-                    result = num1 - num2;
-                    break;
 
-                case "*":
-                    result = num1 * num2;
-                    break;
-
-                case "/":
-                    if (num2 == 0)
-                    {
-                        Console.WriteLine("Ошибка - нельзя делить на 0");
-                        Console.ReadKey();
-                        continue;
-                    }
-                    result = num1 / num2;
-                    break;
-
-                default:
-
-                    Console.WriteLine("Ошибка: Неверный математический знак");
-                    Console.ReadKey();
-                    continue;
-            }
             Console.WriteLine($"Результат операций: {result}");
             Console.WriteLine($"Нажми любую кнопку для следующего круга...");
             Console.ReadKey();
@@ -84,5 +57,21 @@ class Program
         // если сработает один if остальные компьютер скипнет.
         // == проверка сравнение (точно ли) а не присвоение как =
     }
+    static int CalculNum(int a, int b, string? op)
+    {
+        int result = 0;
+
+        switch (op)
+        {
+            case "+": result = a + b; break;
+            case "-": result = a - b; break;
+            case "*": result = a * b; break;
+            case "/":
+                if (b != 0) result = a / b;
+                break;
+        }
+        return result;
+    }
+
 }
 // Main главная точка входа в программу с которой все начинается (в бэкэнде так не пишут)
