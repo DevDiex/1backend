@@ -18,6 +18,7 @@ class Program
             string? input1 = Console.ReadLine(); // Считываем что ввели на клавиатуре и сохраняем как строку из текста
 
             // перевод системы на CultureInfo.InvariantCulture дает возможность системе работать на неизменной культуре (она будет ждать в дробях точку вместо запятой)
+            // гарантия что код будет работать одинаково внезависимости от региона.
             if (double.TryParse(input1, CultureInfo.InvariantCulture, out double num1) == false) // Сразу переводим в число (если ввели букву - ошибка) и out int num1 удобно на лету создать переменную.
             {
                 Console.WriteLine("Ошибка");
@@ -46,9 +47,10 @@ class Program
 
                 continue;
             }
+
             double result = 0;
 
-            result = CalculNum(num1, num2, op);
+            double FinalResult = 0;
 
             if (op == "/" && num2 == 0)
             {
@@ -57,7 +59,43 @@ class Program
                 continue; // Сбрасываем круг не заходя в вычисления
             }
 
+            result = CalculNum(num1, num2, op);
+
             Console.WriteLine($"Результат операций: {result}");
+
+            Console.WriteLine("Что вводим?: (+, -, *, /, exit);");
+            string? op2 = Console.ReadLine();
+
+            if (op2 == "exit")
+            {
+                break;
+            }
+
+            Console.WriteLine("Введите третье число: ");
+            string? input3 = Console.ReadLine();
+
+            if (double.TryParse(input3, CultureInfo.InvariantCulture, out double num3) == false)
+            {
+                Console.WriteLine("Ошибка");
+                Console.ReadKey();
+                continue;
+            }
+
+
+            if (op2 == "/" && num3 == 0)
+            {
+                Console.WriteLine("Ошибка: На ноль делить нельзя");
+                Console.ReadKey();
+                continue; // Сбрасываем круг не заходя в вычисления
+
+            }
+            FinalResult = CalculNum(result, num3, op2);
+
+            // Метод CalculNum (изолированный) универсальный и может хранить в себе любые новые числа подставляя их в многоразовое хранилище (a = result, b = num3, op = op2)
+            // ему плевать на имена переменных ведь он берет их по порядку
+
+
+            Console.WriteLine($"Финальный результат: {FinalResult}");
             Console.WriteLine($"Нажми любую кнопку для следующего круга...");
             Console.ReadKey();
 
@@ -91,6 +129,9 @@ class Program
         return result;
 
     }
-
+    // Приоритет операций (чтобы математически была иерархия мат знаков что сначала умножение или деление потом семья знаков плюс-минус которая ниже и идет после по иерархий)
+    // (5 + 3 * 2) выдаст по нашему методу 16 но математически умножение первее так что изменить надо на 5 + (3*2) = 11 )
+    // Если второй мат знак (op2) "+" или "/" а первый (op) "+" или "-" То НЕЛЬЗЯ считать сначала num1 + num2
+    // Нужно вызвать метод для второй пары CalculNum(num2, num3, op2). и получить промежуточный итог умножения и деления и только потом вызвать метод для первого числа и этого итога: CalculNum(num1, итог, op)
 }
 // Main главная точка входа в программу с которой все начинается (в бэкэнде так не пишут).
