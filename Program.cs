@@ -5,58 +5,105 @@ class Program
 {
     static void Main(string[] args)
     {
+        string?[] inventory = new string[3]; // Массив строк которые могут быть пустыми (null), на 3 ячейки (0, 1, 2)
+        inventory[1] = "Меч новичка";
 
         while (true)
         {
 
-            int maxLimit = 1000;
-            int maxScore = 0;
+            Console.WriteLine("= Инвентарь = ");
 
-            int[] scoreLeaderBoard = new int[5];
-            Console.WriteLine("= Заполнение таблицы =");
-
-            for (int i = 0; i < scoreLeaderBoard.Length; i++)
+            for (int i = 0; i < inventory.Length; i++) // Цикл перфекцонист для вывода предметов
             {
-                Console.WriteLine($"Введите очки от от 1 до 1000: [{i + 1}]");
-                string? input1 = Console.ReadLine();
-
-                if (int.TryParse(input1, CultureInfo.InvariantCulture, out int score) == false)
+                // Проверяем если в ячейке значение равно (null), пишем "Пустой слот"
+                if (inventory[i] == null)
                 {
-
-                    Console.WriteLine("Ошибка");
-                    Console.ReadLine();
-                    i--;
-                    continue;
+                    Console.WriteLine($"Слот [{i}]: -- Пустой слот --");
                 }
-                if (score >= maxLimit)
-                {
-                    Console.WriteLine("Ошибка");
-                    Console.ReadKey();
-                    continue;
-                }
-
-                scoreLeaderBoard[i] = score;
+                else
+                    Console.WriteLine($"Слот [{i}]; {inventory[i]}");
             }
-            Console.WriteLine("\n= Вывод Результата =");
 
+            bool isFull = true;
 
-            for (int i = 0; i < scoreLeaderBoard.Length; i++)
+            Console.WriteLine($"\n Enter a new item name to add to inventory");
+            string? newItem = Console.ReadLine();
+
+            for (int i = 0; i < inventory.Length; i++)
             {
-                if (scoreLeaderBoard[i] > maxScore)
+
+                if (inventory[i] == null) // Если ячейка текстового массива пуста то
                 {
-                    maxScore = scoreLeaderBoard[i];
+                    inventory[i] = newItem;
+                    Console.WriteLine($"\n Item {newItem} added to your {inventory[i]}");
+                    isFull = false; // Инвентарь не заполнен мы нашли место.
+                    break;
                 }
-                Console.WriteLine($"Теперь в ячейке [{i}] лежит {scoreLeaderBoard[i]}");
             }
-            Console.WriteLine($" Максимальный результат раунда: {maxScore}");
+            if (isFull == true)
+            {
+                Console.WriteLine($"\nError: Inventory is full: Reseting");
+                Console.ReadKey();
 
-            Console.ReadKey();
+                inventory[0] = null;
+                inventory[2] = null;
+                Console.WriteLine($"\n Inventory cleared, index [0] and [2] are empty");
+            }
+
+            // while (true)
+            // {
+
+            //     int maxLimit = 1000; // Переменная для хранения максимального счета
+            //     int maxScore = 0; // лучший результат раунда
+
+            //     int[] scoreLeaderBoard = new int[5]; // Массив для хранения 5 чисел
+            //     Console.WriteLine("= Filling an array ="); // Вывод 
+            //                                                // Цикл валидаций и ввода данных
+            //     for (int i = 0; i < scoreLeaderBoard.Length; i++) // Цикл for с массивом (списком) scoreLeaderBoard
+            //     {
+            //         Console.WriteLine($"Enter a score between 1 and 1000: [{i + 1}]");
+            //         string? input1 = Console.ReadLine();
+            //         // Ввел ли пользователь число?
+            //         if (int.TryParse(input1, CultureInfo.InvariantCulture, out int score) == false)
+            //         {
+
+            //             Console.WriteLine("Error: Please enter a valid number");
+            //             Console.ReadLine();
+            //             i--; // Отматываем счетик раунда назад, чтобы переделать шаг
+            //             continue;
+            //         }
+            //         if (score >= maxLimit) // Условие для проверки лимита введенего счетчика и валидаций чисел (не больше 1000)
+            //         {
+            //             Console.WriteLine("Error");
+            //             Console.ReadKey();
+            //             i--; // Отматываем счетик раунда назад, чтобы переделать шаг
+            //             continue;
+            //         }
+
+            //         scoreLeaderBoard[i] = score;
+            //     }
+            //     Console.WriteLine("\n= Result output ="); // Выведем результат
 
 
+            //     for (int i = 0; i < scoreLeaderBoard.Length; i++) // Снова вызовем массив
+            //     {
+            //         if (scoreLeaderBoard[i] > maxScore) // Если массив равен очкам (0) и он будет больше 0, то (0) = массиву (управляется массивом)
+            //         {
+            //             maxScore = scoreLeaderBoard[i];
+            //         }
+            //         Console.WriteLine($"in cell [{i}] the amount of scores equals to {scoreLeaderBoard[i]}");
+            //     }
+            //     Console.WriteLine($" Maximal round score: {maxScore}");
+
+            //     Console.ReadKey();
+
+
+            // }
+
+            // вместо int < 3 можно написать int < Apples.length и это будет равняться реальному КОЛ-ВУ предметов в коробке.
+            // Реальный индекс будет всегда на 1 меньше (<=) длины (например всего 4 индекса ведь он начинается с 0 но по факту длина списка (массива) 5)
+            // Условные переменные i < 3 нужны просто для того чтобы вывело все предметы но не прыгнуло на несуществующий индекс.
         }
-
-        // вместо int < 3 можно написать int < Apples.length и это будет равняться реальному КОЛ-ВУ предметов в коробке.
-        // Реальный индекс будет всегда на 1 меньше (<=) длины (например всего 4 индекса ведь он начинается с 0 но по факту длина списка (массива) 5)
-        // Условные переменные i < 3 нужны просто для того чтобы вывело все предметы но не прыгнуло на несуществующий индекс.
     }
 }
+
