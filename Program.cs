@@ -5,63 +5,66 @@ class Program
 {
     static void Main(string[] args)
     {
-        // Первое знакомство после массивов со списками (List<>)
-
-        List<string> ShopTask = new List<string>();
-
-
-        // Добавление элементов в конец списка
-
-        ShopTask.Add("Alexey");
-        ShopTask.Add("Roman");
-        ShopTask.Add("Dima");
-        ShopTask.Add("Riba");
-        ShopTask.Add("LAMA");
-
-        for (int i = 0; i < ShopTask.Count; i++)
+        while (true)
         {
-            for (int j = 0; j < ShopTask.Count - 1 - i; j++)
+            List<string> NamesMain = new List<string>();
+
+            NamesMain.Add("Admin_Darmek");
+            NamesMain.Add("Admin_Remlik");
+            NamesMain.Add("Dima");
+            NamesMain.Add("Ivan");
+            NamesMain.Add("Admin_SanyaSinShluxi");
+
+
+
+            Console.WriteLine("\n Введите имя пользователя или выйдите из программы командой STOP: ");
+            string? Names = Console.ReadLine() ?? "";
+            if (Names == "STOP")
             {
-                if (ShopTask[j].CompareTo(ShopTask[j + 1]) < 0)
-                {
-                    string temp = ShopTask[j];
-                    ShopTask[j] = ShopTask[j + 1];
-                    ShopTask[j + 1] = temp;
-                }
+                break;
+            }
+
+            if (int.TryParse(Names, out int Namenum) == true)
+
+            {
+                Console.WriteLine("Error");
+                Console.ReadKey();
+                continue;
 
             }
 
+            if (Names == "")
+            {
+                Console.Write("Ошибка: Для повторной попытки нажмите любую клавишу  ");
+                Console.ReadKey();
+                continue;
+            }
+            bool isUserAdmin = Names.StartsWith("Admin_");
+
+            if (isUserAdmin)
+            {
+                Console.WriteLine($"Вы админ - вот вам все известные админы: ");
+            }
+            else
+            {
+                Console.WriteLine("Вы обычный гость: Вот список");
+            }
+
+            foreach (string Nemesis in NamesMain)
+            {
+                bool ListContainAdmin = Nemesis.StartsWith("Admin_");
+
+                if (isUserAdmin && ListContainAdmin)
+                {
+                    Console.WriteLine($"- {Nemesis}");
+                }
+                else if (!isUserAdmin && !ListContainAdmin)
+                {
+                    Console.WriteLine($"- {Nemesis}");
+                }
+            }
+
         }
-        Console.WriteLine($" -- Sorted list -- ");
-
-        foreach (string name in ShopTask)
-        {
-            Console.WriteLine($"Result are easy of {name}");
-        }
-
-
-
-
-
-
-
-
-
-
-        // Узнать кол-во элементов
-        //         int NamesAmount = ShopTask.Count; // Вернет 5
-
-        //         string ListStart = ShopTask[0]; // Начало чтения по индексу (как в массиве)
-
-
-        //         // Удаление элемента по значению (тексту) 
-        //         ShopTask.Remove("Dima");
-
-        //         // Удаление по индексу
-        //         ShopTask.RemoveAt(0);
-
-        // Console.WriteLine($"Your names are in here {ShopTask[1]}");
-
     }
 }
 
