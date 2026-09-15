@@ -1,53 +1,91 @@
-// while (true)
-// {
+using System.Globalization;
+namespace MyConsoleApp;
 
-//     int maxLimit = 1000; // Переменная для хранения максимального счета
-//     int maxScore = 0; // лучший результат раунда
+class Program
+{
+    static void Main(string[] args)
+    {
+        List<string> NamesMain = new List<string>();
 
-//     int[] scoreLeaderBoard = new int[5]; // Массив для хранения 5 чисел
-//     Console.WriteLine("= Filling an array ="); // Вывод 
-//                                                // Цикл валидаций и ввода данных
-//     for (int i = 0; i < scoreLeaderBoard.Length; i++) // Цикл for с массивом (списком) scoreLeaderBoard
-//     {
-//         Console.WriteLine($"Enter a score between 1 and 1000: [{i + 1}]");
-//         string? input1 = Console.ReadLine();
-//         // Ввел ли пользователь число?
-//         if (int.TryParse(input1, CultureInfo.InvariantCulture, out int score) == false)
-//         {
+        NamesMain.Add("Admin_Darmek");
+        NamesMain.Add("Admin_Remlik");
+        NamesMain.Add("Dima");
+        NamesMain.Add("Ivan");
+        NamesMain.Add("Admin_SanyaSinShluxi");
 
-//             Console.WriteLine("Error: Please enter a valid number");
-//             Console.ReadLine();
-//             i--; // Отматываем счетик раунда назад, чтобы переделать шаг
-//             continue;
-//         }
-//         if (score >= maxLimit) // Условие для проверки лимита введенего счетчика и валидаций чисел (не больше 1000)
-//         {
-//             Console.WriteLine("Error");
-//             Console.ReadKey();
-//             i--; // Отматываем счетик раунда назад, чтобы переделать шаг
-//             continue;
-//         }
-
-//         scoreLeaderBoard[i] = score;
-//     }
-//     Console.WriteLine("\n= Result output ="); // Выведем результат
+        while (true)
+        {
 
 
-//     for (int i = 0; i < scoreLeaderBoard.Length; i++) // Снова вызовем массив
-//     {
-//         if (scoreLeaderBoard[i] > maxScore) // Если массив равен очкам (0) и он будет больше 0, то (0) = массиву (управляется массивом)
-//         {
-//             maxScore = scoreLeaderBoard[i];
-//         }
-//         Console.WriteLine($"in cell [{i}] the amount of scores equals to {scoreLeaderBoard[i]}");
-//     }
-//     Console.WriteLine($" Maximal round score: {maxScore}");
 
-//     Console.ReadKey();
+            Console.WriteLine("\n Введите имя пользователя или выйдите из программы командой STOP: ");
+            string? Names = Console.ReadLine() ?? "";
+            if (Names == "STOP")
+            {
+                break;
+            }
 
+            if (int.TryParse(Names, out int Namenum) == true)
 
-// }
+            {
+                Console.WriteLine("Error");
+                Console.ReadKey();
+                continue;
 
-// вместо int < 3 можно написать int < Apples.length и это будет равняться реальному КОЛ-ВУ предметов в коробке.
-// Реальный индекс будет всегда на 1 меньше (<=) длины (например всего 4 индекса ведь он начинается с 0 но по факту длина списка (массива) 5)
-// Условные переменные i < 3 нужны просто для того чтобы вывело все предметы но не прыгнуло на несуществующий индекс.
+            }
+
+            if (Names == "")
+            {
+                Console.Write("Ошибка: Для повторной попытки нажмите любую клавишу  ");
+                Console.ReadKey();
+                continue;
+            }
+            bool isUserAdmin = Names.StartsWith("Admin_");
+
+            if (isUserAdmin)
+            {
+                Console.WriteLine($"Вы админ - вот вам все известные админы: ");
+            }
+            else
+            {
+                Console.WriteLine("Вы обычный гость: Вот список");
+            }
+
+            foreach (string Nemesis in NamesMain)
+            {
+                bool ListContainAdmin = Nemesis.StartsWith("Admin_");
+
+                if (isUserAdmin && ListContainAdmin)
+                {
+                    Console.WriteLine($"- {Nemesis}");
+                }
+                else if (!isUserAdmin && !ListContainAdmin)
+                {
+                    Console.WriteLine($"- {Nemesis}");
+                }
+            }
+
+            Console.WriteLine(" - Введите команду для использования функций - ");
+            string? op2 = Console.ReadLine();
+
+            if (op2 == "-%Ad.Cls%-")
+            {
+                bool UserIsAdmin = Names.StartsWith("Admin_");
+
+                for (int i = 0; i < NamesMain.Count; i++)
+                {
+                    if (!UserIsAdmin || UserIsAdmin)
+                    {
+                        NamesMain.Remove("Admin_Darmek");
+                        NamesMain.Remove("Admin_Remlik");
+                        NamesMain.Remove("Admin_SanyaSinShluxi");
+                    }
+
+                    Console.WriteLine($"Sorted Names: {NamesMain[i]}");
+                }
+            }
+
+        }
+    }
+}
+
