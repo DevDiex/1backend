@@ -70,21 +70,21 @@ class Program
 
             if (op2 == "-%Ad.Cls%-")
             {
-                bool UserIsAdmin = Names.StartsWith("Admin_");
-
-                for (int i = 0; i < NamesMain.Count; i++)
+                for (int i = NamesMain.Count - 1; i >= 0; i--)
                 {
-                    if (!UserIsAdmin || UserIsAdmin)
+                    if (NamesMain[i].StartsWith("Admin_"))
                     {
-                        NamesMain.Remove("Admin_Darmek");
-                        NamesMain.Remove("Admin_Remlik");
-                        NamesMain.Remove("Admin_SanyaSinShluxi");
+                        NamesMain.RemoveAt(i);
                     }
+                }
 
-                    Console.WriteLine($"Sorted Names: {NamesMain[i]}");
+
+                Console.WriteLine($"- List was cleaned from Admins - ");
+                foreach (string CleanedNames in NamesMain)
+                {
+                    Console.WriteLine($"SortedNames: {CleanedNames}");
                 }
             }
-
         }
     }
 }
