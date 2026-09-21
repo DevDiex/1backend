@@ -88,3 +88,82 @@
 //             break;
 
 //     }
+
+
+
+// List<string> Names = new List<string>();
+
+// Names.Add("Admin_Liciy");
+// Names.Add("Mark");
+// Names.Add("Gab");
+// Names.Add("Mos");
+// Names.Add("Admin_Karcen");
+
+// while (true)
+// {
+
+
+//     Console.WriteLine("\n Введите имя пользователя или выйдите из программы командой стоп");
+//     string? inputName = Console.ReadLine() ?? "";
+
+//     if (inputName == "STOP")
+//     {
+//         break;
+//     }
+
+//     if (int.TryParse(inputName, out int NameNum) == true)
+//     {
+//         Console.WriteLine("Error");
+//         Console.ReadKey();
+//         continue;
+//     }
+
+//     if (inputName == "")
+//     {
+//         Console.WriteLine();
+//         Console.ReadKey();
+//         continue;
+//     }
+//     bool isUserAdmin = inputName.StartsWith("Admin_");
+
+//     if (isUserAdmin)
+//     {
+//         Console.WriteLine($"Вы админ вот все известные вам админы");
+//     }
+//     else
+//     {
+//         Console.WriteLine($"Вы обычный гость: Вот список");
+//     }
+
+//     foreach (string Name in Names)
+//     {
+//         bool ListContainAdmins = Name.StartsWith("Admin_");
+
+
+//         if (isUserAdmin && ListContainAdmins)
+//         {
+//             Console.WriteLine($"- {Name}");
+//         }
+//         else if (!isUserAdmin && !ListContainAdmins)
+//         {
+//             Console.WriteLine($"- {Name}");
+//         }
+//     }
+
+//     Console.WriteLine($"Введите команду стоп для останвки программы");
+//     string? Command = Console.ReadLine();
+
+//     if (Command == "-%Ad.Cls%-")
+//     {
+//         bool UserIsAdmin = inputName.StartsWith("Admin_");
+
+//         for (int i = 0; i < Names.Count(); i++)
+//         {
+//             if (!UserIsAdmin || UserIsAdmin)
+//             {
+//                 Names.Remove("Admin_Liciy");
+//                 Names.Remove("Admin_Karcen");
+//             }
+//             Console.WriteLine($"Sorted Names: {Names[i]}");
+//         }
+//     }

@@ -5,69 +5,77 @@ class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine(" \n Бэкэнд серверная логика");
-        int[] serverLogHours = { 12, 45, 5, 90, 23, 150, 4 };
-        int sum = 0;
+        List<string> CalledNames = new List<string>();
 
+        CalledNames.Add("Eugene | Admin | 9 | Екатеринбург");
+        CalledNames.Add("Maria | Guest | 11 | Москва");
+        CalledNames.Add("Renat | Guest | 5 | Италия");
+        CalledNames.Add("Obama | Admin | 2 | Екатеринбург");
+        CalledNames.Add("Jewes | Guest | 14 | Иран");
 
-        Console.WriteLine($"\nОшибки в массиве");
-        PrintArray(serverLogHours);
-
-        foreach (int num in serverLogHours)
+        while (true)
         {
-            sum += num;
-        }
-        Console.WriteLine($"Количество ошибок в этом дне: {sum}");
+            Console.WriteLine($"== Система Контроля Доступа ");
+            Console.WriteLine($"1 - Показать все логи ");
+            Console.WriteLine($"2 - Показать только Админов из Екатеринбурга ");
+            Console.WriteLine($"3 - Удалить гостей, пришедших позже 10:00    ");
+            Console.WriteLine($"4 - Выйти (STOP) ");
+            Console.WriteLine("");
+            Console.WriteLine("Выберите опцию: ");
 
-        BackEndSort(serverLogHours);
-        Console.WriteLine();
+            ProcessMenu(CalledNames);
 
-        SortedList(serverLogHours);
-        SortedConsole(serverLogHours);
-    }
-
-    static void PrintArray(int[] arr)
-    {
-        for (int i = 0; i < arr.Length; i++)
-        {
-
-            Console.WriteLine($"Ошибок {arr[i]} в часу {i}");
-        }
-        Console.WriteLine();
-    }
-
-    static void BackEndSort(int[] arr)
-    {
-        Console.WriteLine($" \n Проверка критических ошибок (i > 50) =:");
-        for (int i = 0; i < arr.Length; i++)
-        {
-            if (arr[i] >= 50)
-            {
-                Console.WriteLine($"Критических ошибок: Количество {arr[i]} больше 50 на часу [{i + 1}]");
-            }
         }
     }
-    static void SortedList(int[] arr)
+    static void ProcessMenu(List<string> logs)
     {
-        for (int i = 0; i < arr.Length; i++)
+        string? option = Console.ReadLine();
+
+        switch (option)
         {
-            for (int j = 0; j < arr.Length - 1; j++)
-            {
-                if (arr[j] > arr[j + 1])
+            case "1":
+                for (int i = 0; i < logs.Count; i++)
                 {
-                    int temp = arr[j];
-                    arr[j] = arr[j + 1];
-                    arr[j + 1] = temp;
+                    Console.WriteLine($"Все логи: {logs[i]}");
                 }
-            }
-        }
-    }
-    static void SortedConsole(int[] arr)
-    {
-        foreach (int errors in arr)
-        {
-            Console.WriteLine($"{errors}");
+                break;
+            case "2":
+                for (int i = 0; i < logs.Count; i++)
+                {
+                    if (logs[i].Contains("Admin"))
+                    {
+                        Console.WriteLine($"{logs[i]}");
+                    }
+                }
+                break;
+            case "3":
+                for (int i = logs.Count - 1; i >= 0; i--)
+                {
+                    string[] names = logs[i].Split("|");
+
+                    // Теперь у нас автоматически:
+                    // parts[0] - имя ("Maria")
+                    // parts[1] - статус ("Guest")
+                    // parts[2] - время ("11")
+                    // parts[3] - Город (или страна - Америка)
+
+                    int time = int.Parse(names[2].Trim());
+
+                    if (names[1].Contains("Guest") && time > 10)
+                    {
+                        logs.RemoveAt(i);
+                    }
+
+                }
+                break;
+            case "4":
+                Console.WriteLine("ВВЕДИТЕ STOP");
+                string? input1 = Console.ReadLine();
+                if (input1 == "STOP")
+                {
+                    Environment.Exit(0);
+                }
+                break;
         }
     }
 }
-
