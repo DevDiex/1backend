@@ -5,29 +5,32 @@ class Program
 {
     static void Main(string[] args)
     {
-        List<string> CalledNames = new List<string>();
+        List<EmployeeLog> CalledNames = new List<EmployeeLog>();
 
-        CalledNames.Add("Eugene | Admin | 9 | Екатеринбург");
-        CalledNames.Add("Maria | Guest | 11 | Москва");
-        CalledNames.Add("Renat | Guest | 5 | Италия");
-        CalledNames.Add("Obama | Admin | 2 | Екатеринбург");
-        CalledNames.Add("Jewes | Guest | 14 | Иран");
+        CalledNames.Add(new EmployeeLog { Name = "Eugene", Status = "Admin", City = "Мосвка", Time = 10 });
+        CalledNames.Add(new EmployeeLog { Name = "Krabst", Status = "Guest", City = "Екатеринбург", Time = 5 });
+        CalledNames.Add(new EmployeeLog { Name = "Evgene", Status = "Admin", City = "Москва", Time = 15 });
+        CalledNames.Add(new EmployeeLog { Name = "Mariana", Status = "Guest", City = "seventeen", Time = 5 });
+        CalledNames.Add(new EmployeeLog { Name = "DeanW", Status = "Admin", City = "Сан-Франциско", Time = 15 });
 
         while (true)
         {
-            Console.WriteLine($"== Система Контроля Доступа ");
-            Console.WriteLine($"1 - Показать все логи ");
-            Console.WriteLine($"2 - Показать только Админов из Екатеринбурга ");
-            Console.WriteLine($"3 - Удалить гостей, пришедших позже 10:00    ");
-            Console.WriteLine($"4 - Выйти (STOP) ");
-            Console.WriteLine("");
-            Console.WriteLine("Выберите опцию: ");
+            Console.WriteLine();
+            Console.WriteLine("== Система Контроля Доступа ==");
+            Console.WriteLine("1 - Показать все логи");
+            Console.WriteLine("2 - Показать только Админов из Екатеринбурга");
+            Console.WriteLine("3 - Удалить гостей, пришедших после 10 ");
+            Console.WriteLine("4 - Выйти (STOP)");
+            Console.WriteLine();
+            Console.WriteLine("Выберите Опцию");
 
             ProcessMenu(CalledNames);
-
         }
+
+
+
     }
-    static void ProcessMenu(List<string> logs)
+    static void ProcessMenu(List<EmployeeLog> logs)
     {
         string? option = Console.ReadLine();
 
@@ -36,46 +39,52 @@ class Program
             case "1":
                 for (int i = 0; i < logs.Count; i++)
                 {
-                    Console.WriteLine($"Все логи: {logs[i]}");
+                    Console.WriteLine($"Сотрудник : {logs[i].Name} | Статус: {logs[i].Status} | Время: {logs[i].Time}, Город: {logs[i].City}");
                 }
+                Console.Write("Нажмите клавишу для перезапуска программы: ");
+                Console.ReadKey();
+
                 break;
+
             case "2":
                 for (int i = 0; i < logs.Count; i++)
                 {
-                    if (logs[i].Contains("Admin"))
+                    if (logs[i].Status == "Admin" && logs[i].City == "Москва")
                     {
-                        Console.WriteLine($"{logs[i]}");
+                        Console.WriteLine($"Админ: {logs[i].Name} из города {logs[i].City}");
                     }
                 }
                 break;
             case "3":
                 for (int i = logs.Count - 1; i >= 0; i--)
                 {
-                    string[] names = logs[i].Split("|");
 
-                    // Теперь у нас автоматически:
-                    // parts[0] - имя ("Maria")
-                    // parts[1] - статус ("Guest")
-                    // parts[2] - время ("11")
-                    // parts[3] - Город (или страна - Америка)
-
-                    int time = int.Parse(names[2].Trim());
-
-                    if (names[1].Contains("Guest") && time > 10)
+                    if (logs[i].Status == "Guest" && logs[i].Time > 10)
                     {
-                        logs.RemoveAt(i);
+                        Console.WriteLine($"Удален гость: {logs[i].Name}");
+                        logs.RemoveAt(i); // RemoveAt вместо Remove из-за наличия удаления за счет индексов
                     }
 
                 }
                 break;
+
             case "4":
-                Console.WriteLine("ВВЕДИТЕ STOP");
-                string? input1 = Console.ReadLine();
-                if (input1 == "STOP")
+                Console.WriteLine("Введите STOP");
+                string? command = Console.ReadLine();
+
+                if (command == "STOP")
                 {
                     Environment.Exit(0);
                 }
                 break;
         }
     }
+}
+
+public class EmployeeLog
+{
+    public string? Name { get; set; } = string.Empty;
+    public string? Status { get; set; } = string.Empty;
+    public int Time { get; set; }
+    public string? City { get; set; } = string.Empty;
 }
