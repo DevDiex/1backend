@@ -6,6 +6,7 @@ public class Item
     public string? Name { get; set; } = string.Empty; // Название Предмета
     public string? Rarity { get; set; } = string.Empty; // Редкость
     public int DamageBonus { get; set; } // Бонус к атаке
+    public bool isEquipped { get; set; } = false; // true - в руках, false - в рюкзаке (по умолчанию)
 }
 
 class Program
@@ -26,7 +27,8 @@ class Program
             Console.WriteLine("1 - Показать весь инвентарь");
             Console.WriteLine("2 - Показать только Эпические предметы");
             Console.WriteLine("3 - Введите предмет в инвентарь");
-            Console.WriteLine("4 - Выйти из игры");
+            Console.WriteLine("4 - Экипировать предмет");
+            Console.WriteLine("5 - Выйти из игры");
             Console.Write("Выберите опцию: ");
 
             string? choice = Console.ReadLine();
@@ -37,7 +39,9 @@ class Program
                     Console.WriteLine("-- Ваши предметы --");
                     for (int i = 0; i < Inventory.Count; i++)
                     {
-                        Console.WriteLine($"[{Inventory[i].Rarity}], [{Inventory[i].Name}], [{Inventory[i].DamageBonus}]");
+                        string equipStatus = Inventory[i].isEquipped ? " [В РУКАХ]" : ""; // Тернарный оператор (сокращенный if else с string equipstatus;)
+
+                        Console.WriteLine($"[{Inventory[i].Rarity}], [{Inventory[i].Name}], [Урон {Inventory[i].DamageBonus}] - {equipStatus}");
                     }
                     break;
                 case "2":
@@ -124,6 +128,39 @@ class Program
 
 
                 case "4":
+                    Console.WriteLine("== Экипировка Оружия ==");
+                    Console.Write("Введите точное название предмета, который вы хотите взять в руки: ");
+                    string? equipName = Console.ReadLine();
+
+                    bool itemFound = false; // По умолчанию предмет не найден
+
+
+                    for (int i = 0; i < Inventory.Count; i++) // Проверяем весь список чтобы была информация о всех предметах и соответственно если название предмета в массиве существует оно может быть экипировано то есть введено нами чтобы мы могли его экипировать
+                    {
+                        if (Inventory[i].Name == equipName)
+                        {
+                            for (int j = 0; j < Inventory.Count; j++) // внутренний цикл обнуляющий весь инвентарь после ввода того предмета который мы хотим экипировать (поменять статус на true)
+                            {
+                                Inventory[j].isEquipped = false;
+                            }
+
+                            Inventory[i].isEquipped = true;
+
+                            itemFound = true;
+
+                            Console.WriteLine($"Вы успешно экипировали: {Inventory[i].Name}");
+                            break;
+                        }
+                    }
+                    if (!itemFound)
+                    {
+                        Console.WriteLine("Ошибка: Предмет с таким названием не был найден");
+                    }
+
+                    Console.ReadKey();
+                    break;
+
+                case "5":
                     Console.WriteLine("Выход из игры...");
                     return; // Завершаем метод Main и закрываем программу
             }
