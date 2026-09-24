@@ -46,12 +46,12 @@ class Program
                     {
                         if (Inventory[i].Rarity == "Epic")
                         {
-                            Console.WriteLine($"🔥{Inventory[i].Name}🔥. Его урон [{Inventory[i].DamageBonus}] и его редкость [{Inventory[i].Rarity}]");
+                            Console.WriteLine($"{Inventory[i].Name}. Его урон [{Inventory[i].DamageBonus}] и его редкость [{Inventory[i].Rarity}]");
                         }
                     }
                     break;
                 case "3":
-                    if (Inventory.Count > 5)
+                    if (Inventory.Count >= 5)
                     {
                         Console.WriteLine("Ошибка! инвентарь заполнен");
                         Console.ReadKey();
@@ -70,6 +70,24 @@ class Program
                         continue;
                     }
 
+                    bool isDuplicate = false; // Флаг проверки
+
+                    for (int i = 0; i < Inventory.Count; i++)
+                    {
+                        if (Inventory[i].Name == item1)
+                        {
+                            Console.WriteLine("Ошибка: Предмет уже существует");
+                            Console.ReadKey();
+                            isDuplicate = true;
+                            break; // Выход из цикла for ведь дубликат найден
+                        }
+                    }
+
+                    if (isDuplicate)
+                    {
+                        continue;
+                    }
+
                     Console.Write("Введите редкость из выпадающего списка: (Basic, Rare, Epic): ");
                     string? Rarity2 = Console.ReadLine();
 
@@ -80,13 +98,17 @@ class Program
                         continue;
                     }
 
-                    Console.Write("Введите Бонус к атаке (число): ");
-                    if (!int.TryParse(Console.ReadLine(), out int damage) || damage < 0)
+                    Console.WriteLine("введите бонус к атаке предмету");
+                    string? command1 = Console.ReadLine();
+
+                    if (int.TryParse(command1, out int damage) == false || damage < 0)
                     {
-                        Console.WriteLine("Ошибка: Бонус должен быть положительным числом");
+                        Console.WriteLine("Ошибка: Неверное значение");
                         Console.ReadKey();
                         continue;
                     }
+
+
 
                     Item newItem = new Item
                     {
