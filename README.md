@@ -6,5 +6,6 @@ Repository for first experiments, tests and mini-projects C# / .NET. 10
 ## 📂 what's inside?:
 - **Bank logic:** 45-50 hours of experiments with variables, balance and conditions `if-else` with operator switch and his marks called "cases".
 - **In Plans:** Basic calculator (completed), interactive input(completed), work with cycles and error handler(in proccess) - yes up to 09.24.2026 still practice with for and while loops.
+Solved (technically): Inventory mini project where you can manually type names and statistics for your Items/Things with OOP starting classes that exists in List<>
 
 *Learning C# from scratch, first backend repository and logic experiments from scratch.*
