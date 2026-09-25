@@ -28,7 +28,8 @@ class Program
             Console.WriteLine("2 - Показать только Эпические предметы");
             Console.WriteLine("3 - Введите предмет в инвентарь");
             Console.WriteLine("4 - Экипировать предмет");
-            Console.WriteLine("5 - Выйти из игры");
+            Console.WriteLine("5 - Вывод суммы урона всех предметов");
+            Console.WriteLine("6 - Выйти из игры");
             Console.Write("Выберите опцию: ");
 
             string? choice = Console.ReadLine();
@@ -39,9 +40,16 @@ class Program
                     Console.WriteLine("-- Ваши предметы --");
                     for (int i = 0; i < Inventory.Count; i++)
                     {
-                        string equipStatus = Inventory[i].isEquipped ? " [В РУКАХ]" : ""; // Тернарный оператор (сокращенный if else с string equipstatus;)
+                        Console.Write($"[{Inventory[i].Name}], [{Inventory[i].Rarity}], [{Inventory[i].DamageBonus}] ");
 
-                        Console.WriteLine($"[{Inventory[i].Rarity}], [{Inventory[i].Name}], [Урон {Inventory[i].DamageBonus}] - {equipStatus}");
+                        if (Inventory[i].isEquipped == true)
+                        {
+                            Console.WriteLine("В руках");
+                        }
+                        else
+                        {
+                            Console.WriteLine();
+                        }
                     }
                     break;
                 case "2":
@@ -128,39 +136,52 @@ class Program
 
 
                 case "4":
-                    Console.WriteLine("== Экипировка Оружия ==");
-                    Console.Write("Введите точное название предмета, который вы хотите взять в руки: ");
+                    Console.WriteLine("Экипировка предмета");
+                    Console.Write("Введите название предмета в вашем инвентаре: ");
+
                     string? equipName = Console.ReadLine();
 
-                    bool itemFound = false; // По умолчанию предмет не найден
-
-
-                    for (int i = 0; i < Inventory.Count; i++) // Проверяем весь список чтобы была информация о всех предметах и соответственно если название предмета в массиве существует оно может быть экипировано то есть введено нами чтобы мы могли его экипировать
+                    for (int i = 0; i < Inventory.Count; i++)
                     {
+                        bool itemFound = false;
+
                         if (Inventory[i].Name == equipName)
                         {
-                            for (int j = 0; j < Inventory.Count; j++) // внутренний цикл обнуляющий весь инвентарь после ввода того предмета который мы хотим экипировать (поменять статус на true)
+                            for (int j = 0; j < Inventory.Count; j++)
                             {
-                                Inventory[j].isEquipped = false;
+                                Inventory[i].isEquipped = false;
+                                itemFound = false;
                             }
 
                             Inventory[i].isEquipped = true;
-
                             itemFound = true;
 
-                            Console.WriteLine($"Вы успешно экипировали: {Inventory[i].Name}");
-                            break;
                         }
+
                     }
-                    if (!itemFound)
+
+
+                    break;
+                case "5":
+
+                    Console.WriteLine("Расчет боевой мощи инвентаря героя");
+
+                    int TotalDamage = 0;
+
+                    for (int i = 0; i < Inventory.Count; i++)
                     {
-                        Console.WriteLine("Ошибка: Предмет с таким названием не был найден");
+
+                        TotalDamage += Inventory[i].DamageBonus;
+
                     }
+
+                    Console.WriteLine($"Статистика: Общий урон всех предметов в инвентаре +{TotalDamage}");
 
                     Console.ReadKey();
                     break;
 
-                case "5":
+
+                case "6":
                     Console.WriteLine("Выход из игры...");
                     return; // Завершаем метод Main и закрываем программу
             }
