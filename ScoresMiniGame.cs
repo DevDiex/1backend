@@ -29,7 +29,8 @@ class Program
             Console.WriteLine("3 - Введите предмет в инвентарь");
             Console.WriteLine("4 - Экипировать предмет");
             Console.WriteLine("5 - Вывод суммы урона всех предметов");
-            Console.WriteLine("6 - Выйти из игры");
+            Console.WriteLine("6 - Урон экипированного предмета");
+            Console.WriteLine("7 - Выйти из игры");
             Console.Write("Выберите опцию: ");
 
             string? choice = Console.ReadLine();
@@ -140,26 +141,43 @@ class Program
                     Console.Write("Введите название предмета в вашем инвентаре: ");
 
                     string? equipName = Console.ReadLine();
+                    bool itemFound = false;
 
                     for (int i = 0; i < Inventory.Count; i++)
                     {
-                        bool itemFound = false;
 
                         if (Inventory[i].Name == equipName)
                         {
-                            for (int j = 0; j < Inventory.Count; j++)
+                            if (Inventory[i].isEquipped == true)
                             {
+                                Console.WriteLine("Предмет убран в инвентарь");
                                 Inventory[i].isEquipped = false;
-                                itemFound = false;
+                                itemFound = true;
+                                break;
                             }
+                            else
+                            {
+                                for (int j = 0; j < Inventory.Count; j++)
+                                {
+                                    Inventory[i].isEquipped = false;
+                                }
 
-                            Inventory[i].isEquipped = true;
-                            itemFound = true;
-
+                                Inventory[i].isEquipped = true;
+                                itemFound = true;
+                                break;
+                            }
                         }
 
                     }
-
+                    if (!itemFound)
+                    {
+                        Console.WriteLine("Ошибка - предмет не найден");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Действие выполнено");
+                    }
+                    Console.ReadKey();
 
                     break;
                 case "5":
@@ -180,11 +198,41 @@ class Program
                     Console.ReadKey();
                     break;
 
-
                 case "6":
+
+                    Console.WriteLine("Суммаризация урона экипированного в вашей руке");
+                    int equippedItem = 0;
+                    bool isItemEquipped = false;
+                    for (int i = 0; i < Inventory.Count; i++)
+                    {
+                        if (Inventory[i].isEquipped == true)
+                        {
+                            equippedItem += Inventory[i].DamageBonus;
+                            Console.WriteLine($"Урон вашего предмета = {equippedItem}");
+                            isItemEquipped = true;
+                        }
+                    }
+                    if (isItemEquipped == true)
+                    {
+                        Console.ReadKey();
+                        break;
+                    }
+                    else if (isItemEquipped == false)
+                    {
+                        Console.WriteLine("Ошибка: Предмет не экипирован");
+                        Console.ReadKey();
+                        continue;
+                    }
+
+                    Console.ReadKey();
+                    break;
+                case "7":
                     Console.WriteLine("Выход из игры...");
                     return; // Завершаем метод Main и закрываем программу
             }
         }
     }
 }
+
+// bool itemFound - просматривание найден ли предмет или мы ввели имя несуществующего предмета
+// 
