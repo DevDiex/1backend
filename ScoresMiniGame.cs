@@ -24,12 +24,12 @@ public class Car
     }
 
     // Сборка заводской машины по умолчанию (перегрузка). Цвет и мощность выставляется языком, будет просить только модель
-    public Car(string? model) // перегрузка конструкторами на примере (можно вместить какие то свойства которые мы можем заранее заполнить в отдельном классе, а какие уже заполнены)
+    public Car(string? color) // перегрузка конструкторами на примере (можно вместить какие то свойства которые мы можем заранее заполнить в отдельном классе, а какие уже заполнены)
 
     {
 
-        Model = model;
-        Color = "Белый";
+        Model = "Жигуль";
+        Color = color;
         HorsePower = 90;
 
         Console.WriteLine("Собран базовый автомобиль по умолчанию");
@@ -39,6 +39,15 @@ public class Car
     {
         // Т.к. как метод внутри класса создается необязательно наличие индексов [i]
         Console.WriteLine($"[ГАРАЖ]: Автомобиль {Model} | Цвет: {Color} | Мощность: {HorsePower}");
+    }
+
+
+    public void Repaint(string newColor)
+    {
+        Color = newColor;
+
+        Console.WriteLine($"Тюнинг: Машина {Model} успешно перекрашена - новый цвет {Color}");
+        Console.WriteLine();
     }
 
 }
@@ -53,13 +62,14 @@ class Program
         Garage.Add(new Car("Audi RS6", "Синий", 0));
         Garage.Add(new Car("Lada Granta", "Белый", 90));
 
-        Garage.Add(new Car("Volga Gas-24")); // Компьютер просматривает наши конструкторы в отдельном классе и выбирает подходящий по условиям (1 строка требует заполнения, а остальные заполнены по заводским настройкам/по конструктору)
+        Garage.Add(new Car("Розовый")); // Компьютер просматривает наши конструкторы в отдельном классе и выбирает подходящий по условиям (1 строка требует заполнения, а остальные заполнены по заводским настройкам/по конструктору)
 
         while (true)
         {
             Console.WriteLine("1 - Получить список всех машин в гараже");
             Console.WriteLine("2 - Заполнить список пожеланиями");
-            Console.WriteLine("3 - Выйти из программы");
+            Console.WriteLine("3 - Перекрасить машину в гараже");
+            Console.WriteLine("4 - Выйти из программы");
 
 
             string? command = Console.ReadLine();
@@ -139,6 +149,42 @@ class Program
 
                     break;
                 case "3":
+                    Console.WriteLine("Цех покраски");
+                    Console.Write("Введите модель машины которую хотите перекрасить: ");
+                    string? targetModel = Console.ReadLine();
+
+                    bool carFound = false;
+
+                    for (int i = 0; i < Garage.Count; i++)
+                    {
+                        if (Garage[i].Model == targetModel)
+                        {
+                            Console.Write($"в какой цвет желаете перекрасить {Garage[i].Model}: ");
+                            string? userColor = Console.ReadLine();
+
+                            if (string.IsNullOrWhiteSpace(userColor)) // Если наша targetModel пуста или был нажат пробел
+                            {
+                                Console.WriteLine("Строка не может быть пустой");
+                                Console.ReadKey();
+                                break;
+                            }
+
+                            Garage[i].Repaint(userColor); // Вызов метода перекраски (userColor является новым цветом) у конкретной найденной машины
+
+                            carFound = true;
+                            Console.ReadKey();
+                            break; // Машина перекрашена, останавливаем поиск
+                        }
+                    }
+
+                    if (!carFound) // Если машина не найдена
+                    {
+                        Console.WriteLine("Ошибка: Такой машины в гараже нету");
+                        Console.ReadKey();
+                    }
+                    break;
+
+                case "4":
                     return;
             }
 
