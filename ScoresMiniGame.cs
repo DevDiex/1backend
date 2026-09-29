@@ -9,19 +9,36 @@ public class Car
 
     // Конструктор класса (в круглых скобках указываются параметры которые обязательно нужно дать при созданий машины)
     // Обычно называются также как свойства но с маленькой буквы вполне можно
-    public Car(string? model, string? color, int horsepower)
+    public Car(string? model, string? color, int horsepower) // - круглые скробки () вызов конструктора а {} скобки - вызов инициализатора
     {
+
         Model = model;
         Color = color;
         HorsePower = horsepower;
 
-        if (horsepower <= 0)
+        if (HorsePower <= 0)
         {
             Console.WriteLine($"Установленная минимальная мощность 1 ваших автомобилей: {Model}");
             HorsePower = 1;
         }
-        Console.WriteLine($"Выпущена новая марка машины - {Model}"); // Любая логика выполняющаяся при рождений обьекта
-        Console.WriteLine();
+    }
+
+    // Сборка заводской машины по умолчанию (перегрузка). Цвет и мощность выставляется языком, будет просить только модель
+    public Car(string? model) // перегрузка конструкторами на примере (можно вместить какие то свойства которые мы можем заранее заполнить в отдельном классе, а какие уже заполнены)
+
+    {
+
+        Model = model;
+        Color = "Белый";
+        HorsePower = 90;
+
+        Console.WriteLine("Собран базовый автомобиль по умолчанию");
+
+    }
+    public void PrintInfo()
+    {
+        // Т.к. как метод внутри класса создается необязательно наличие индексов [i]
+        Console.WriteLine($"[ГАРАЖ]: Автомобиль {Model} | Цвет: {Color} | Мощность: {HorsePower}");
     }
 
 }
@@ -35,6 +52,8 @@ class Program
         Garage.Add(new Car("BMW M5", "Черный", 0)); // Разница в отсутствий громоздкого кода и фигурных скобок (new Item{ Name = "..."})
         Garage.Add(new Car("Audi RS6", "Синий", 0));
         Garage.Add(new Car("Lada Granta", "Белый", 90));
+
+        Garage.Add(new Car("Volga Gas-24")); // Компьютер просматривает наши конструкторы в отдельном классе и выбирает подходящий по условиям (1 строка требует заполнения, а остальные заполнены по заводским настройкам/по конструктору)
 
         while (true)
         {
@@ -50,7 +69,7 @@ class Program
                 case "1":
                     for (int i = 0; i < Garage.Count; i++)
                     {
-                        Console.WriteLine($"Машина {Garage[i].Model} с цветом {Garage[i].Color} и мощностью {Garage[i].HorsePower} в вашем гараже");
+                        Garage[i].PrintInfo(); // какая-либо машина под индексом [i] сама выполнит свой внутренний метод
                     }
                     break;
                 case "2":
@@ -108,12 +127,14 @@ class Program
                         continue;
                     }
 
-                    Garage.Add(new Car(car1, color1, HorsePow));
+                    Car newcar = new Car(car1, color1, HorsePow);
+                    // Car - Тип данных который берется за шаблон
+                    // newCar - Название переменной
+                    // = - связывание имени переменной с созданным обьектом
+                    // new - вызов конструктора 
 
-                    for (int i = 0; i < Garage.Count; i++)
-                    {
-                        Console.WriteLine($"\n[УСПЕХ]:  {Garage[i].Model} успешно припаркован в гараж");
-                    }
+                    Console.WriteLine($"Ваш {newcar.Model} был добавлен в гараж");
+                    Garage.Add(newcar);
                     Console.ReadKey();
 
                     break;
