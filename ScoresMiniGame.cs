@@ -3,7 +3,7 @@ namespace MyConsoleApp;
 
 public class Car
 {
-    public string? Model { get; set; }
+    public string? Model { get; set; } // без set; можем вывести значение объекта в отдельном классе в Console.WriteLine(); но там же нельзя будет использовать обращение к классу и его свойству через наше имя например Car myCar и myCar.Model = "...." - нельзя
     public string? Color { get; set; }
     public int HorsePower { get; set; }
 
@@ -42,7 +42,7 @@ public class Car
     }
 
 
-    public void Repaint(string newColor)
+    public void Repaint(string newColor) // отдельный метод хранящий в себе переменную текста для Смен
     {
         Color = newColor;
 
@@ -52,17 +52,83 @@ public class Car
 
 }
 
+public class GarageManager
+{
+
+    public List<Car> Garage { get; set; } = new List<Car>();
+
+    public GarageManager()
+    {
+        // Три машины вызванные 1-ым конструктором с 3-емя параметрами
+        Garage.Add(new Car("BMW", "Синий", 600));
+        Garage.Add(new Car("Lada Granta", "Желтый", 495));
+        Garage.Add(new Car("Audi R6", "Фиолетовый", 333));
+
+        Garage.Add(new Car("Фиолетовый")); // Вызов 2-ого конструктора класса Car с 1 параметром
+    }
+
+    // метод перебора который засорял прошлый метод Main внутри класса Program
+    public void ShowAllCars()
+    {
+        Console.WriteLine("\n -- Список всех машин в гараже--");
+
+        if (Garage.Count == 0)
+        {
+            Console.WriteLine("Гараж абсолютно пуст");
+            return;
+        }
+
+        for (int i = 0; i < Garage.Count; i++)
+        {
+            // Менеджер просит вызвать свой собственный метод вывода существующий у каждой машины
+            Garage[i].PrintInfo();
+        }
+    }
+
+    public void AddCarToGarage(Car newCar)
+    {
+
+        if (Garage.Count >= 5)
+        {
+            Console.WriteLine("\n Ошибка: Хранилище заполнено");
+            return; // Завершение метода, машина не добавляется
+        }
+        Garage.Add(newCar);
+        Console.WriteLine($"Ваш {newCar.Model} был успешно добавлен в ваш гараж");
+    }
+
+    public void TryRepaintCar(string? targetModel, string? newColor) // отдельно прописанная логика case "3" (в скобках ровно два значения текстовых ведь перекраска машины - текст)
+    {
+        if (string.IsNullOrWhiteSpace(newColor))
+        {
+            Console.WriteLine("Ошибка: Неверный цвет");
+            return;
+        }
+
+        bool carFound = false;
+
+        for (int i = 0; i < Garage.Count; i++)
+        {
+            if (Garage[i].Model == targetModel)
+            {
+                Garage[i].Repaint(newColor);
+
+                carFound = true;
+                break; // Останавливаем цикл ведь машина найдена и покрашена
+            }
+        }
+        if (!carFound)
+        {
+            Console.WriteLine($"Машина марки {targetModel} не найдена в гараже");
+        }
+    }
+}
+
 class Program
 {
     static void Main(string[] args)
     {
-        List<Car> Garage = new List<Car>(); // Обычный динамический массив (лист список)
-
-        Garage.Add(new Car("BMW M5", "Черный", 0)); // Разница в отсутствий громоздкого кода и фигурных скобок (new Item{ Name = "..."})
-        Garage.Add(new Car("Audi RS6", "Синий", 0));
-        Garage.Add(new Car("Lada Granta", "Белый", 90));
-
-        Garage.Add(new Car("Розовый")); // Компьютер просматривает наши конструкторы в отдельном классе и выбирает подходящий по условиям (1 строка требует заполнения, а остальные заполнены по заводским настройкам/по конструктору)
+        GarageManager manager = new GarageManager();
 
         while (true)
         {
@@ -77,52 +143,32 @@ class Program
             switch (command)
             {
                 case "1":
-                    for (int i = 0; i < Garage.Count; i++)
-                    {
-                        Garage[i].PrintInfo(); // какая-либо машина под индексом [i] сама выполнит свой внутренний метод
-                    }
+
+                    // Чистое ООП без циклов в методе Main основного интерфейс класса - менеджер просто выводит список через обращение к классу менеджера который содержит в листе тип данных списка с его установленными правилами
+
+                    manager.ShowAllCars();
+                    Console.ReadKey();
                     break;
                 case "2":
-                    Console.WriteLine("== Заполнение гаража == ");
-                    if (Garage.Count >= 5)
-                    {
-                        Console.WriteLine("Ошибка: Максимальное вместилище хранилища = 5");
-                        Console.ReadKey();
-                        continue;
-                    }
-                    Console.WriteLine("Введите название новой машины");
-                    string? car1 = Console.ReadLine();
+                    Console.WriteLine($"\n - Заполнение гаража - ");
 
-                    if (int.TryParse(car1, out int carModel) == true || string.IsNullOrWhiteSpace(car1))
+                    Console.Write("Введите название нашей машины: ");
+                    string? carName = Console.ReadLine();
+
+                    if (int.TryParse(carName, out int num1) == true || string.IsNullOrWhiteSpace(carName))
                     {
-                        Console.WriteLine("Ошибка: Неккоректное название марки машины");
+                        Console.WriteLine("Ошибка: Некорректное название марки машины");
                         Console.ReadKey();
                         continue;
                     }
 
-                    bool isDuplicated = false;
+                    Console.Write("Введите цвет машины (Черный, Синий, Белый): ");
+                    string? carColor = Console.ReadLine();
 
-                    for (int i = 0; i < Garage.Count; i++)
-                    {
-                        if (Garage[i].Model == car1)
-                        {
-                            Console.WriteLine("Ошибка: Вы не можете повторно вписать сюда существующую модель");
-                            Console.ReadKey();
-                            isDuplicated = true;
-                            break;
-                        }
-                    }
-                    if (isDuplicated)
-                    {
-                        continue;
-                    }
 
-                    Console.Write("Введите цвет машины: (Черный, Синий, Белый): ");
-                    string? color1 = Console.ReadLine();
-
-                    if (color1 != "Черный" && color1 != "Синий" && color1 != "Белый")
+                    if (carColor != "Черный" && carColor != "Синий" && carColor != "Белый")
                     {
-                        Console.WriteLine("Ошибка: Такой цвет не производится у нас");
+                        Console.WriteLine("Ошибка: Такой цвет не производится на нашем заводе");
                         Console.ReadKey();
                         continue;
                     }
@@ -130,64 +176,45 @@ class Program
                     Console.Write("Введите лошадиные мощности машины: ");
                     string? HorseP = Console.ReadLine();
 
-                    if (int.TryParse(HorseP, out int HorsePow) == false || string.IsNullOrWhiteSpace(HorseP) || HorsePow < 0)
+                    if (int.TryParse(HorseP, out int HorsePowers) == false || string.IsNullOrWhiteSpace(HorseP) || HorsePowers < 0)
                     {
-                        Console.WriteLine("Ты уебан тупой");
+                        Console.WriteLine($"Ошибка ввода мощности");
                         Console.ReadKey();
                         continue;
                     }
 
-                    Car newcar = new Car(car1, color1, HorsePow);
-                    // Car - Тип данных который берется за шаблон
-                    // newCar - Название переменной
-                    // = - связывание имени переменной с созданным обьектом
-                    // new - вызов конструктора 
+                    Car userCar = new Car(carName, carColor, HorsePowers); // Создание новой машины по чертежу Car (первому классу) - вызовом первого конструктора
 
-                    Console.WriteLine($"Ваш {newcar.Model} был добавлен в гараж");
-                    Garage.Add(newcar);
+                    // Связывание отдачей созданной машины менеджеру
+                    // Менеджер проверит сам внутри себя лимит (count >= 5) и положит ее в свой список
+                    manager.AddCarToGarage(userCar);
                     Console.ReadKey();
-
                     break;
+
                 case "3":
+
                     Console.WriteLine("Цех покраски");
-                    Console.Write("Введите модель машины которую хотите перекрасить: ");
-                    string? targetModel = Console.ReadLine();
 
-                    bool carFound = false;
+                    Console.Write("Введите машину которую хотите перекрасить");
+                    string? carModel = Console.ReadLine();
 
-                    for (int i = 0; i < Garage.Count; i++)
-                    {
-                        if (Garage[i].Model == targetModel)
-                        {
-                            Console.Write($"в какой цвет желаете перекрасить {Garage[i].Model}: ");
-                            string? userColor = Console.ReadLine();
+                    Console.Write("Введите новый цвет: ");
+                    string? newColor = Console.ReadLine();
 
-                            if (string.IsNullOrWhiteSpace(userColor)) // Если наша targetModel пуста или был нажат пробел
-                            {
-                                Console.WriteLine("Строка не может быть пустой");
-                                Console.ReadKey();
-                                break;
-                            }
-
-                            Garage[i].Repaint(userColor); // Вызов метода перекраски (userColor является новым цветом) у конкретной найденной машины
-
-                            carFound = true;
-                            Console.ReadKey();
-                            break; // Машина перекрашена, останавливаем поиск
-                        }
-                    }
-
-                    if (!carFound) // Если машина не найдена
-                    {
-                        Console.WriteLine("Ошибка: Такой машины в гараже нету");
-                        Console.ReadKey();
-                    }
+                    manager.TryRepaintCar(carModel, newColor);
+                    Console.ReadKey();
                     break;
+
+                // Кейс становится компатным и ему становится достаточно компактной логики через ввод в строке и остальную логику на себя берет класс менеджер (внутренню)
+                // остальные значения подставляются по-ходу событий из скобок нашего метода string в то что 
 
                 case "4":
+                    Console.WriteLine("Выход...");
                     return;
             }
-
         }
     }
 }
+// логика вызова классов и их методов проста - есть класс Car и ему нужно выделить память под функционал класса и вызов методов этого класса все что внутри него идет через точку
+// То есть мы обращаемся к любому классу или классу Car и выдаем ему название а внутри уже тут можем ссылаться на все методы функций класса через точку (например manager.TryRepaintCar)?
+// В том числе можно ссылаться на класс и после выдачи имени через new вызывать конструктор (внимательно смотреть на переменные внутри скобок - 1/2/3/4 и тд соблюдать тип данных)
